@@ -6,10 +6,27 @@
  */
 
 // Require statements
+
 const request = require('supertest');
 const express = require('express');
-const app = require('../src/app');
+const app = require('../src/app/app');
 const { errorHandler } = require('../src/error-handler');
+
+
+
+//const mongoose = require("mongoose");
+//const { Task } = require("../../../src/models/task");
+//const { Project, Counter } = require("../../../src/models/project");
+
+
+//const app = require('../src/app/app');
+//const { errorHandler } = require('../src/error-handler');
+//const router = express.Router();
+
+// Importing the index router
+//const indexRouter = require("../routes/index");
+//const taskRouter = require("../models/task");
+//const projectRouter = require("../models/project");
 
 // Test cases
 describe('app.js', () => {
@@ -17,7 +34,7 @@ describe('app.js', () => {
   it('should set CORS headers', async () => {
     const response = await request(app).get('/api');
     expect(response.headers['access-control-allow-origin']).toBe('*');
-    expect(response.headers['access-control-allow-methods']).toBe('GET, POST, PUT, DELETE, OPTIONS');
+    expect(response.headers['access-control-allow-methods']).toBe('GET, POST, PUT, PATCH, DELETE, OPTIONS');
     expect(response.headers['access-control-allow-headers']).toBe('Origin, X-Requested-With, Content-Type, Accept');
   });
 
