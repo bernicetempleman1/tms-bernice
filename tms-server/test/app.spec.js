@@ -7,11 +7,37 @@
 
 // Require statements
 
+
+const mongoose = require("mongoose");
 const request = require('supertest');
 const express = require('express');
 const app = require('../src/app/app');
 const { errorHandler } = require('../src/error-handler');
 
+
+// Connect to a test database
+// "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
+beforeAll(async () => {
+  const connectionString =
+    "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
+
+  try {
+    await mongoose.connect(connectionString, {
+      dbName: "tms",
+    });
+    console.log("task.spec.js Connection to the database instance was successful");
+  } catch (err) {
+    console.error(`MongoDB connection error: ${err}`);
+  }
+});
+
+
+
+// Close the database connection after all tests
+afterAll(async () => {
+  await mongoose.connection.close();
+  console.log("Database connection closed");
+});
 
 
 //const mongoose = require("mongoose");
