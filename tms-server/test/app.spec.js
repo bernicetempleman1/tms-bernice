@@ -3,20 +3,19 @@
  * Date: 7 August 2024
  * File: app.spec.js
  * Description: Test file for the Express application setup.
+ * 
+ * 26 November 2024 Updated by Bernice Templeman: TMS database connection string
+ *
  */
 
 // Require statements
-
-
 const mongoose = require("mongoose");
 const request = require('supertest');
 const express = require('express');
 const app = require('../src/app/app');
 const { errorHandler } = require('../src/error-handler');
 
-
 // Connect to a test database
-// "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
 beforeAll(async () => {
   const connectionString =
     "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
@@ -31,28 +30,11 @@ beforeAll(async () => {
   }
 });
 
-
-
 // Close the database connection after all tests
 afterAll(async () => {
   await mongoose.connection.close();
   console.log("Database connection closed");
 });
-
-
-//const mongoose = require("mongoose");
-//const { Task } = require("../../../src/models/task");
-//const { Project, Counter } = require("../../../src/models/project");
-
-
-//const app = require('../src/app/app');
-//const { errorHandler } = require('../src/error-handler');
-//const router = express.Router();
-
-// Importing the index router
-//const indexRouter = require("../routes/index");
-//const taskRouter = require("../models/task");
-//const projectRouter = require("../models/project");
 
 // Test cases
 describe('app.js', () => {

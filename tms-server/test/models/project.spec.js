@@ -8,7 +8,7 @@ const dbName = "tms";
 const connectionString =
   "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
 
-
+  // Connect to database 
   beforeAll(async () => {
     const connectionString =
       "mongodb+srv://tms_user:s3cret@bellevueuniversity.lftytpq.mongodb.net/?retryWrites=true&w=majority&appName=BellevueUniversity";
@@ -35,6 +35,7 @@ const connectionString =
     console.log("Database connection closed");
   });
 
+// Tests for Project
 describe("Project Model Test", () => {
   it("should create a project successfully", async () => {
     const projectData = {
@@ -195,10 +196,7 @@ describe("Project Model Test", () => {
     }
     expect(err).toBeDefined();
     expect(err.message).toBe(
-      "End Date must be greater than Start Date"
-   
+      "End Date must be greater than Start Date" 
     );
   });
-
 });
-// expect(err).toBe(  "[Error: End Date must be greater than Start Date]"
