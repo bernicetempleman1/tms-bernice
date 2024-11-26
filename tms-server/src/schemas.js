@@ -86,9 +86,12 @@ const addProjectSchema = {
         type: "string",
         pattern: "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)?$",
       },
+      projectId: {
+        type: Number,
+      },
     },
     //A project must have a name and a start date 
-    required: ["name", "startDate", "endDate"],
+    required: ["name", "startDate", "endDate", "projectId"],
     additionalProperties: false,
   };
   
@@ -104,9 +107,12 @@ const addProjectSchema = {
         type: "string",
         pattern: "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)?$",
       },
+      projectId: {
+        type: Number,
+      },
     },
     //A task must have a title, status, and priority 
-    required: ["title", "status", "priority"],
+    required: ["title", "status", "priority", "projectId"],
     additionalProperties: false,
   };
   
