@@ -26,6 +26,7 @@ const connectionString =
   // Clear the database before each test
   beforeEach(async () => {
     await Project.deleteMany({});
+    await Counter.deleteMany({});
   });
   
   // Close the database connection after all tests
@@ -48,14 +49,13 @@ describe("Project Model Test", () => {
     const savedProject = await project.save();
     expect(savedProject._id).toBeDefined();
     expect(savedProject.name).toBe(projectData.name);
-    expect(savedProject.location).toBe(projectData.location);
     expect(savedProject.description).toBe(projectData.description);
   });
- /*
+ 
   it("should validate project name correctly", async () => {
     const projectData = {
         projectId: 1000,
-        name: "Project Alpha",
+        name: "1Project Alpha",
         description: "Initial phase of the project",
         startDate: "2021-01-01T00:00:00.000Z",
         endDate: "2021-06-01T00:00:00.000Z",
@@ -78,7 +78,6 @@ describe("Project Model Test", () => {
 
   it("should auto-increment projectId correctly", async () => {
     const projectData1 = {
-
         name: "Project Alpha",
         description: "Initial phase of the project",
         startDate: "2021-01-01T00:00:00.000Z",
@@ -88,7 +87,7 @@ describe("Project Model Test", () => {
     };
     const projectData2 = {
 
-        name: "Project Alpha-2",
+        name: "Project Beta",
         description: "Initial phase of the project",
         startDate: "2021-01-01T00:00:00.000Z",
         endDate: "2021-06-01T00:00:00.000Z",
@@ -102,7 +101,7 @@ describe("Project Model Test", () => {
     expect(savedProject1.projectId).toBe(1);
     expect(savedProject2.projectId).toBe(2);
   });
-  */
+  
 
   it("should fail to create a project with a name shorter than 3 characters", async () => {
     const projectData = {
@@ -175,4 +174,31 @@ describe("Project Model Test", () => {
       "Description cannot exceed 500 characters"
     );
   });
+
+  it("should fail to create a project with a start date after the end date", async () => {
+    const projectData = {
+      name: "Project Start and End",
+      projectId: 1000,
+      description: "Initial phase of the project",
+      startDate: "2021-06-01T00:00:00.000Z",
+      endDate: "2021-01-01T00:00:00.000Z",
+      dateCreated: "2021-01-01T00:00:00.000Z",
+      dateModified: "2021-01-05T00:00:00.000Z",
+    };
+    const project = new Project(projectData);
+    let err;
+
+    try {
+      await project.save();
+    } catch (error) {
+      err = error;
+    }
+    expect(err).toBeDefined();
+    expect(err.message).toBe(
+      "End Date must be greater than Start Date"
+   
+    );
+  });
+
 });
+// expect(err).toBe(  "[Error: End Date must be greater than Start Date]"

@@ -1,10 +1,30 @@
+/*
+Project:
+"_id": "650c1f1e1c9d440000a1b1c1", 
+"projectId": 1000, 
+"name": "Project Alpha", 
+"description": "Initial phase of the project", 
+"startDate": "2021-01-01T00:00:00.000Z", 
+"endDate": "2021-06-01T00:00:00.000Z",
+"dateCreated": "2021-01-01T00:00:00.000Z", 
+"dateModified": "2021-01-05T00:00:00.000Z" 
+
+constraints:
+startDate in the Projects collection must be a valid date 
+endDate in the Projects collection, if provided, must be a valid date and be after the startDate
+
+Business rules
+1. A task belongs to one project 
+2. A project can have many tasks 
+*/
+
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
 // Define the counter schema
 let counterSchema = new Schema({
   _id: { type: String, required: true },
-  seq: { type: Number, default: 0 }
+  seq: { type: Number, default: 0 },
 });
 
 // Create a counter model
@@ -30,9 +50,11 @@ let projectSchema = new Schema({
   startDate: {
     type: Date,
     default: Date.now,
+    required: true,
   },
   endDate: {
     type: Date,
+    required: true,
   },
   dateCreated: {
     type: Date,
@@ -52,23 +74,28 @@ projectSchema.path("name").validate(function (val) {
 // If the document is new, increment the gardenId
 // If the document is not new, update the dateModified
 projectSchema.pre("validate", async function (next) {
-  let doc = this;
-  if (this.isNew) {
-    try {
-      const counter = await Counter.findByIdAndUpdate(
-        { _id: "projectId" },
-        { $inc: { seq: 1 } },
-        { new: true, upsert: true }
-      );
-      doc.projectId = counter.seq;
+  if (this.startDate < this.endDate) {
+    let doc = this;
+    if (this.isNew) {
+      try {
+        const counter = await Counter.findByIdAndUpdate(
+          { _id: "projectId" },
+          { $inc: { seq: 1 } },
+          { new: true, upsert: true }
+        );
+        doc.projectId = counter.seq;
+        next();
+      } catch (err) {
+        console.error("Error in Counter.findByIdAndUpdate:", err);
+        next(err);
+      }
+    } else {
+      doc.dateModified = new Date();
       next();
-    } catch (err) {
-      console.error("Error in Counter.findByIdAndUpdate:", err);
-      next(err);
     }
   } else {
-    doc.dateModified = new Date();
-    next();
+    console.error("Error in start date");
+    next(new Error("End Date must be greater than Start Date"));
   }
 });
 

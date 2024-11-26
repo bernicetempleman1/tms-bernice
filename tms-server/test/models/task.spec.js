@@ -48,11 +48,11 @@ describe("Task Model Test", () => {
     expect(savedTask.title).toBe(taskData.title);
   
   });
- /*
+ 
+  ////A task must have a title, status, and priority 
   it("should fail to create a task without required fields", async () => {
     const taskData = {
       description: "Write the documentation for the project",
-      status: "In Progress",
       priority: "High",
       dueDate: "2021-01-10T00:00:00.000Z",
       dateCreated: "2021-01-01T00:00:00.000Z",
@@ -87,9 +87,9 @@ describe("Task Model Test", () => {
     };
     const task = new Task(taskData);
     const savedTask = await task.save();
-    savedTask.status = "High";
+    savedTask.status = "Completed";
     const updatedTask = await savedTask.save();
-    expect(updatedTask.status).toBe("High");
+    expect(updatedTask.status).toBe("Completed");
   });
 
   it("should fail to create a task with a title shorter than 3 characters", async () => {
@@ -169,6 +169,6 @@ describe("Task Model Test", () => {
       "`InvalidStatus` is not a valid enum value for path `status`."
     );
   });
-  */
+  
 });
 
