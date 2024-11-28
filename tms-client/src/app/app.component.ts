@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -17,13 +18,13 @@ import { RouterLink, RouterOutlet } from '@angular/router';
             >
           </li>
           <li class="navbar__item">
-            <a class="navbar__link" routerLink="/gardens"
-              ><i class="fas fa-seedling"></i> Gardens</a
+            <a class="navbar__link" routerLink="/projects"
+              ><i class="fas fa-seedling"></i> Projects</a
             >
           </li>
           <li class="navbar__item">
-            <a class="navbar__link" href="#"
-              ><i class="fas faleaf"></i> Plants</a
+            <a class="navbar__link" routerLink="/tasks"
+              ><i class="fas faleaf"></i> Tasks</a
             >
           </li>
         </ul>

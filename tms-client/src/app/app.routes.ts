@@ -11,12 +11,20 @@ export const routes: Routes = [
     component: HomeComponent,
   },
   {
+  path: 'tasks',
+component: TaskCreateComponent,
+},
+  {
     path: 'tasks/create',
     component: TaskCreateComponent,
   },
   {
     path: 'tasks/update',
     component: TaskUpdateComponent,
+  },
+  {
+    path: 'projects',
+    component: ProjectReadByIdComponent,
   },
   {
     path: 'projects/:projectId',

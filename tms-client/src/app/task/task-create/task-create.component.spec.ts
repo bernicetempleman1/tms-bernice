@@ -24,7 +24,7 @@ describe('TaskCreateComponent', () => {
         ReactiveFormsModule,
         HttpClientModule,
         RouterTestingModule,
-        TaskAddComponent,
+        TaskCreateComponent,
       ],
       providers: [
         TaskService,

@@ -22,7 +22,7 @@ import { AddTaskDTO } from '../task';
         Fill in the details to add a new task.
       </h4>
       <div class="task-add-page__card">
-        <form [formGroup]="plantForm" class="task-add-page__form">
+        <form [formGroup]="taskForm" class="task-add-page__form">
           <div class="task-add-page__form-group">
             <label for="name" class="task-add-page__form-label"
               >Task Name</label
@@ -161,7 +161,7 @@ text-decoration: underline;
 }
 `,
 })
-export class TaskAddComponent {
+export class TaskCreateComponent {
   projects: any[] = [];
   taskForm: FormGroup = this.fb.group({
     name: [
@@ -195,9 +195,10 @@ export class TaskAddComponent {
         title: this.taskForm.controls['title'].value,
         priority: this.taskForm.controls['priority'].value,
         status: this.taskForm.controls['status'].value,
-        dueDate: dueDate,
+        dueDate: this.taskForm.controls['dueDate'].value,
+        projectId: this.taskForm.controls['projectId'].value,
       };
-      this.taskService.addTask(projectId, newTask).subscribe({
+      this.taskService.addTask(newTask).subscribe({
         next: (result: any) => {
           console.log(`Task created successfully: ${result.message}`);
           this.router.navigate(['/tasks']);
