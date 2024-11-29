@@ -16,15 +16,15 @@ import { Project, UpdateProjectDTO } from '../project';
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   template: `
     <div class="project-details-page">
-      <h1 class="project-details-page__title">Garden Details</h1>
+      <h1 class="project-details-page__title">Project Details</h1>
       <h4 class="project-details-page__subtitle">
-        Explore the detailed information about your selected garden, including
-        its location, plants, and maintenance schedule.
+        Explore the detailed information about your selected project, including
+        its location, projects, and maintenance schedule.
       </h4>
       <div class="project-details-page__card">
         <form [formGroup]="projectForm" class="project-details-page__form">
           <div class="project-details-page__form-group">
-            <label for="name" class="garden-details-page__form-label"
+            <label for="name" class="project-details-page__form-label"
               >Project Name</label
             >
             <input
@@ -34,17 +34,7 @@ import { Project, UpdateProjectDTO } from '../project';
               formControlName="name"
             />
           </div>
-          <div class="project-details-page__form-group">
-            <label for="location" class="project-details-page__form-label"
-              >Project Location</label
-            >
-            <input
-              type="text"
-              id="location"
-              class="project-details-page__form-control"
-              formControlName="location"
-            />
-          </div>
+
           <div class="project-details-page__form-group">
             <label for="description" class="project-details-page__form-label"
               >Project Description</label
@@ -202,3 +192,9 @@ export class ProjectReadByIdComponent {
     }
   }
 }
+
+/*
+
+<th class="plant-page__table-header">Functions</th>
+
+*/

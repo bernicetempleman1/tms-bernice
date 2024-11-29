@@ -25,7 +25,7 @@ describe('ProjectService', () => {
   it('should retrieve all projects', () => {
     const dummyProjects: Project[] = [
       { _id: '1', projectId: 1, name: 'Garden 1', description: 'Description 1' },
-      { _id: '2', projectId: 2, name: 'Garden 2', , description: 'Description 2' },
+      { _id: '2', projectId: 2, name: 'Garden 2', description: 'Description 2' },
   ];
 
   service.getProjects().subscribe(projects => {

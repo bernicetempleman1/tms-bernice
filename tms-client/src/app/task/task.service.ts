@@ -10,18 +10,30 @@ import { UpdateTaskDTO } from './task';
 })
 export class TaskService {
   constructor(private http: HttpClient) {}
-  getPTasks() {
+  getTasks() {
     return this.http.get<Task[]>(`${environment.apiBaseUrl}/api/tasks`);
   }
 
   getTask(taskId: string) {
-    return this.http.get<Task>(
-      `${environment.apiBaseUrl}/api/tasks/${taskId}`
-    );
+    return this.http.get<Task>(`${environment.apiBaseUrl}/api/tasks/${taskId}`);
   }
 
-  addTask(task: AddTaskDTO) {
-    return this.http.post<Task>(`${environment.apiBaseUrl}/api/tasks`, task);
+
+  //7.9
+  /*
+  addPlant(plant: AddPlantDTO) {
+    return this.http.post<Plant>(`${environment.apiBaseUrl}/api/plants`, plant);
+    }
+
+    */
+
+//7.33
+  addTask(projectId: number, task: AddTaskDTO) {
+    console.log("task.service.ts: add task");
+    return this.http.post<Task>(
+      `${environment.apiBaseUrl}/api/tasks/${projectId}`,
+      task
+    );
   }
 
   updateTask(taskId: string, updateTask: UpdateTaskDTO) {

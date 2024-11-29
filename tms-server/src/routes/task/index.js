@@ -29,6 +29,7 @@ router.get("/:taskId", async (req, res, next) => {
   }
 });
 
+/*
 router.post("/:taskId", async (req, res, next) => {
   try {
     const valid = validateAddTask(req.body);
@@ -50,8 +51,30 @@ router.post("/:taskId", async (req, res, next) => {
     next(err);
   }
 });
+*/
+router.post("/add/:projectId", async (req, res, next) => {
+  try {
+    const valid = validateAddTask(req.body);
+    if (!valid) {
+      return next(createError(400, ajv.errorsText(validateAddTask.errors)));
+    }
+    const payload = {
+      ...req.body,
+      projectId: req.params.projectId,
+    };
+    const task = new Task(payload);
+    await task.save();
+    res.send({
+      message: "Task created successfully",
+      id: task._id,
+    });
+  } catch (err) {
+    console.error(`Error while creating task: ${err}`);
+    next(err);
+  }
+});
 
-router.patch("/:taskId", async (req, res, next) => {
+router.patch("/update/:taskId", async (req, res, next) => {
   try {
     const task = await Task.findOne({ _id: req.params.taskId });
     const valid = validateUpdateTask(req.body);

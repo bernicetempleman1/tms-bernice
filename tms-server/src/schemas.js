@@ -1,5 +1,5 @@
 /*
-
+title in the Tasks collection must be unique
  1. A task must have a title, status, and priority 
 2. A project must have a name and a start date 
 3. The status of a task can only be one of the following: “Pending”, “In Progress”, “Completed” 
@@ -52,7 +52,7 @@ const addProjectSchema = {
         type: "string",
         pattern: "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)?$",
       },
-      // verify valid endate
+      // verify valid enddate
       endDate: {
         type: "string",
         pattern: "^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z)?$",

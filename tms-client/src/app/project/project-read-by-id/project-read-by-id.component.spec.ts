@@ -9,14 +9,14 @@ import { Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 import { ProjectReadByIdComponent } from './project-read-by-id.component';
-import { ProjectService } from '../garden.service';
+import { ProjectService } from '../project.service';
 import { Project, UpdateProjectDTO } from '../project';
 import { ActivatedRoute } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing';
 
 describe('ProjectReadByIdComponent', () => {
-  let component: ProjectReadByIdComponentt;
-  let fixture: ComponentFixture<GProjectReadByIdComponent>;
+  let component: ProjectReadByIdComponent;
+  let fixture: ComponentFixture<ProjectReadByIdComponent>;
   let projectService: ProjectService;
   let router: Router;
   let activatedRoute: ActivatedRoute;
@@ -39,7 +39,7 @@ describe('ProjectReadByIdComponent', () => {
     }).compileComponents();
     fixture = TestBed.createComponent(ProjectReadByIdComponent);
     component = fixture.componentInstance;
-    projectService = TestBed.inject(PeojectService);
+    projectService = TestBed.inject(ProjectService);
     router = TestBed.inject(Router);
     activatedRoute = TestBed.inject(ActivatedRoute);
     fixture.detectChanges();

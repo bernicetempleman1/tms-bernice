@@ -36,7 +36,7 @@ describe('TaskCreateComponent', () => {
       ],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(TaskAddComponent);
+    fixture = TestBed.createComponent(TaskCreateComponent);
     component = fixture.componentInstance;
     taskService = TestBed.inject(TaskService);
     projectService = TestBed.inject(ProjectService);
@@ -50,7 +50,8 @@ describe('TaskCreateComponent', () => {
   });
 
   it('should have a valid form when all fields are filled correctly', () => {
-    component.taskForm.controls['title'].setValue('Test Plant');
+    component.taskForm.controls['title'].setValue('Test project');
+    component.taskForm.controls['description'].setValue('Test project');
     component.taskForm.controls['priority'].setValue('High');
     component.taskForm.controls['status'].setValue('In Progress');
     component.taskForm.controls['projectId'].setValue(1);

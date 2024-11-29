@@ -1,9 +1,61 @@
-const request = require('supertest');
-const app = require('../../../src/app');
-const { Plant } = require('../../../src/models/task');
+import {
+  ComponentFixture,
+  fakeAsync,
+  TestBed,
+  tick,
+} from '@angular/core/testing';
 
-jest.mock('../../../src/models/task'); // Mock the Plant model
-describe('Task API', () => {
+import { TaskUpdateComponent } from './task-update.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { TaskService } from '../task.service';
+import { ProjectService } from '../../project/project.service';
+import { ActivatedRoute } from '@angular/router';
+import { RouterTestingModule } from '@angular/router/testing';
+import { of, throwError } from 'rxjs';
+import { UpdateTaskDTO, Task } from '../task';
+
+describe('TaskUpdateComponent', () => {
+  let component: TaskUpdateComponent;
+  let fixture: ComponentFixture<TaskUpdateComponent>;
+  let taskService: TaskService;
+  let router: Router;
+  let activatedRoute: ActivatedRoute;
+
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [
+        ReactiveFormsModule,
+        HttpClientModule,
+        RouterTestingModule,
+        TaskUpdateComponent,
+      ],
+      providers: [
+        TaskService,
+        {
+          provide: ActivatedRoute,
+          useValue: { snapshot: { paramMap: { get: () => '1' } } },
+        },
+      ],
+    }).compileComponents();
+    fixture = TestBed.createComponent(TaskUpdateComponent);
+    component = fixture.componentInstance;
+    taskService = TestBed.inject(TaskService);
+    router = TestBed.inject(Router);
+    activatedRoute = TestBed.inject(ActivatedRoute);
+    fixture.detectChanges();
+  });
+
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+});
+
+/*
+
+
+
   describe('GET /api/tasks', () => {
     it('should get all tasks', async () => {
       Task.find.mockResolvedValue([{ title: 'Rose' }]); // Mock the find method
@@ -46,7 +98,7 @@ describe('Task API', () => {
         title: 'Rose',
         priority: 'Flower',
         dueDate: '2023-04-15T00:00:00.000Z',
-        status: 'Planted', // Ensure all required properties are included
+        status: 'projected', // Ensure all required properties are included
       });
       expect(response.status).toBe(200);
       expect(response.body.message).toBe('Task created successfully');
@@ -57,7 +109,7 @@ describe('Task API', () => {
         title: 'Rose',
         priority: 'InvalidType', // Invalid: not in enum
         dueDate: '2023-04-15T00:00:00.000Z',
-        status: 'Planted',
+        status: 'projected',
       });
       expect(response.status).toBe(400);
       const errorMessages = response.body.message;
@@ -68,7 +120,7 @@ describe('Task API', () => {
   });
   describe('PATCH /api/tasks/:taskId', () => {
     it('should update a task successfully', async () => {
-      const mockPlant = {
+      const mockproject = {
         _id: '507f1f77bcf86cd799439011',
         title: 'Rose',
         priority: 'High',
@@ -85,10 +137,11 @@ describe('Task API', () => {
           status: 'Growing', // Ensure all required properties are included
         });
       expect(response.status).toBe(200);
-      expect(response.body.message).toBe('Plant updated successfully');
+      expect(response.body.message).toBe('project updated successfully');
     });
+
     it('should return validation errors for invalid data', async () => {
-      const mockPlant = {
+      const mockproject = {
         _id: '507f1f77bcf86cd799439011',
         title: 'Rose',
         priority: 'Flower',
@@ -97,9 +150,9 @@ describe('Task API', () => {
         save: jest.fn().mockResolvedValue(true),
       };
 
-      Plant.findOne.mockResolvedValue(mockPlant);
+      project.findOne.mockResolvedValue(mockproject);
       const response = await request(app)
-        .patch('/api/plants/507f1f77bcf86cd799439011')
+        .patch('/api/projects/507f1f77bcf86cd799439011')
         .send({
           title: 'R', // Invalid: too short
           priority: 'InvalidType', // Invalid: not in enum
@@ -111,5 +164,49 @@ describe('Task API', () => {
     });
   });
 
+  ***************************************8
+it ('should have a valid form when all fields are filled correctly', () => {
+component.plantForm.controls['name'].setValue('Test Plant');
+component.plantForm.controls['type'].setValue('Flower');
+component.plantForm.controls['status'].setValue('Planted');
+expect(component.plantForm.valid).toBeTruthy();
 });
-
+it('should call updatePlant and navigate on successful form submission', fakeAsync(() => {
+const updatePlantDTO = {
+name: 'Test Plant',
+type: 'Flower',
+status: 'Planted'
+};
+const mockResponse: Plant = {
+_id: '1',
+gardenId: 1,
+name: 'Test Plant',
+type: 'Flower',
+status: 'Planted',
+datePlanted: '2023-01-01',
+dateHarvested: '2023-01-15',
+dateCreated: '2023-01-01',
+dateModified: '2023-01-15'
+};
+spyOn(plantService, 'updatePlant').and.returnValue(of(mockResponse));
+spyOn(router, 'navigate');
+component.plantForm.controls['name'].setValue(updatePlantDTO.name);
+component.plantForm.controls['type'].setValue(updatePlantDTO.type);
+component.plantForm.controls['status'].setValue(updatePlantDTO.status);
+component.onSubmit();
+tick();
+expect(plantService.updatePlant).toHaveBeenCalledWith('1', updatePlantDTO);
+expect(router.navigate).toHaveBeenCalledWith(['/plants']);
+}));
+it('should handle error on form submission failure', fakeAsync(() => {
+spyOn(plantService, 'updatePlant').and.returnValue(throwError('Error updating plant'));
+spyOn(console, 'error');
+component.plantForm.controls['name'].setValue('Test Plant');
+component.plantForm.controls['type'].setValue('Flower');
+component.plantForm.controls['status'].setValue('Planted');
+component.onSubmit();
+tick();
+expect(plantService.updatePlant).toHaveBeenCalled();
+expect(console.error).toHaveBeenCalledWith('Error updating plant', 'Error updating plant');
+}));
+*/
