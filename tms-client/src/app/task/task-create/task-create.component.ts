@@ -1,3 +1,12 @@
+/**
+ * Author: Bernice Templeman
+ * Date: 2 December 2024
+ * File: task-create-component.ts
+ * Description: Create a Task
+ *
+ */
+//Reference: Krasso, R. (2024). Lean, MEAN, and Pragmatic: A Guide to Full-Stack JavaScript Development (page 172)
+
 //166
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
@@ -13,11 +22,9 @@ import { Project } from '../../project/project';
 import { ProjectService } from '../../project/project.service';
 import { AddTaskDTO } from '../task';
 import { HttpClient } from '@angular/common/http';
-//import { environment } from '../../environments/environment';
-//import { ErrorHandler } from '@angular/core';
 
 @Component({
-  selector: 'app-task-add',
+  selector: 'app-task-create',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, RouterLink],
   template: `
@@ -37,6 +44,7 @@ import { HttpClient } from '@angular/common/http';
               id="title"
               class="task-add-page__form-control"
               formControlName="title"
+              required
             />
           </div>
 
@@ -53,21 +61,6 @@ import { HttpClient } from '@angular/common/http';
           </div>
 
           <div class="task-add-page__form-group">
-            <label for="priority" class="task-add-page__form-label"
-              >Task Priority</label
-            >
-            <select
-              id="priority"
-              class="task-add-page__form-control"
-              formControlName="priority"
-            >
-              <option value="High">High</option>
-              <option value="Medium">Medium</option>
-              <option value="Low">Low</option>
-            </select>
-          </div>
-
-          <div class="task-add-page__form-group">
             <label for="status" class="task-add-page__form-label"
               >Task Status</label
             >
@@ -75,6 +68,7 @@ import { HttpClient } from '@angular/common/http';
               id="status"
               class="project-add-page__form-control"
               formControlName="status"
+              required
             >
               <option value="Pending">Pending</option>
               <option value="In Progress">In Progress</option>
@@ -83,19 +77,37 @@ import { HttpClient } from '@angular/common/http';
           </div>
 
           <div class="task-add-page__form-group">
-            <label for="taskId" class="task-add-page__form-label"
+            <label for="priority" class="task-add-page__form-label"
+              >Task Priority</label
+            >
+            <select
+              id="priority"
+              class="task-add-page__form-control"
+              formControlName="priority"
+              required
+            >
+              <option value="High">High</option>
+              <option value="Medium">Medium</option>
+              <option value="Low">Low</option>
+            </select>
+          </div>
+
+          <div class="task-add-page__form-group">
+            <label for="projectId" class="task-add-page__form-label"
               >Project</label
             >
             <select
               id="projectId"
               class="task-add-page__form-control"
               formControlName="projectId"
+              required
             >
               @for (project of projects; track project) {
               <option [value]="project.projectId">{{ project.name }}</option>
               }
             </select>
           </div>
+
           <div class="task-add-page__form-group">
             <label for="dueDate" class="task-add-page__form-label"
               >Due Date</label
@@ -105,6 +117,7 @@ import { HttpClient } from '@angular/common/http';
               id="dueDate"
               class="task-add-page__form-control"
               formControlName="dueDate"
+              required
             />
           </div>
 
@@ -197,141 +210,11 @@ export class TaskCreateComponent {
       Validators.compose([
         Validators.required,
         Validators.minLength(3),
-        Validators.maxLength(100),
       ]),
     ],
     priority: [null, Validators.required],
     status: [null, Validators.required],
-    projectId: [null, Validators.required],
     dueDate: [null, Validators.required],
-  });
-  constructor(
-    private fb: FormBuilder,
-    private router: Router,
-    private taskService: TaskService,
-    private projectService: ProjectService
-  ) {
-    this.projectService.getProjects().subscribe({
-      next: (projects: any) => {
-        this.projects = projects;
-      },
-    });
-  }
-
-  onSubmit() {
-    if (this.taskForm.valid) {
-      console.log('task-create: add task');
-      const projectId = this.taskForm.controls['projectId'].value;
-      const dueDate = new Date(
-        this.taskForm.controls['dueDate'].value
-      ).toISOString();
-      const newTask: AddTaskDTO = {
-        title: this.taskForm.controls['title'].value,
-        description: this.taskForm.controls['description'].value,
-        priority: this.taskForm.controls['priority'].value,
-        status: this.taskForm.controls['status'].value,
-        dueDate: this.taskForm.controls['dueDate'].value,
-      };
-      console.log('task-create: add task');
-
-      this.taskService.addTask(projectId, newTask).subscribe({
-        next: (result: any) => {
-          console.log(`Task created successfully: ${result.message}`);
-          this.router.navigate(['/tasks']);
-        },
-        error: (err: any) => {
-          console.error('Error creating task', err);
-        },
-      });
-    }
-  }
-}
-
-//******************** */
-/*
-  taskForm: FormGroup = this.fb.group({
-    title: [
-      null,
-      Validators.compose([Validators.required, Validators.minLength(3)]),
-    ],
-    description: [
-      null,
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(100),
-      ]),
-    ],
-    priority: [null, Validators.required],
-    status: [null, Validators.required],
-    projectId: [null, Validators.required],
-  });
-
-  constructor(
-    private http: HttpClient,
-    private fb: FormBuilder,
-    private router: Router,
-    //private taskService: TaskService,
-    //private projectService: ProjectService
-  ) {
-    this.errorMessage = '';
-    //this.projectService.getProjects().subscribe({next: (projects: any) => { this.projects = projects;}, });
-  }
-
-  addTask() {
-    if (!this.taskForm.valid) {
-      this.errorMessage = 'Please fill in all fields.';
-      return;
-    }
-
-    const newTask = {
-      title: this.taskForm.controls['title'].value,
-      description: this.taskForm.controls['description'].value,
-      priority: this.taskForm.controls['priority'].value,
-      status: this.taskForm.controls['status'].value,
-      dueDate: this.taskForm.controls['dueDate'].value,
-      projectId: this.taskForm.controls['projectId'].value,
-    };
-
-    console.log('New Task', newTask);
-
-    this.http
-      .post(`${environment.apiBaseUrl}/api/tasks/`, {
-        task: newTask,
-      })
-      .subscribe({
-        next: (task: Task) => {
-          console.log('Task created', task);
-          this.router.navigate(['/tasks']);
-        },
-        error: (error: Error) => {
-          console.error('Error creating task', error);
-          this.errorMessage = error.message;
-        },
-      });
-  }
-}
-
-
-/************************************************** */
-/*
-projects: any[] = [];
-
-  taskForm: FormGroup = this.fb.group({
-    title: [
-      null,
-      Validators.compose([Validators.required, Validators.minLength(3)]),
-    ],
-    description: [
-      null,
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(100),
-      ]),
-    ],
-    priority: [null, Validators.required],
-    status: [null, Validators.required],
     projectId: [null, Validators.required],
   });
   constructor(
@@ -352,14 +235,14 @@ projects: any[] = [];
       console.log('task-create: add task');
       const projectId = this.taskForm.controls['projectId'].value;
       const dueDate = new Date(
-        this.taskForm.controls['dueDate'].value
-      ).toISOString();
+        this.taskForm.controls['dueDate'].value).toISOString();
       const newTask: AddTaskDTO = {
         title: this.taskForm.controls['title'].value,
         description: this.taskForm.controls['description'].value,
-        priority: this.taskForm.controls['priority'].value,
         status: this.taskForm.controls['status'].value,
+        priority: this.taskForm.controls['priority'].value,
         dueDate: this.taskForm.controls['dueDate'].value,
+
       };
       console.log('task-create: add task');
 
@@ -372,72 +255,9 @@ projects: any[] = [];
           console.error('Error creating task', err);
         },
       });
+    } else {
+      console.log('task-create: form not valid');
     }
   }
 }
-/************************************************** */
 
-/*
-errorMessage: string;
-
-  newUserForm: FormGroup = this.fb.group({
-    username: [
-      null,
-      Validators.compose([
-        Validators.required,
-        Validators.minLength(3),
-        Validators.maxLength(20),
-      ]),
-    ],
-    password: [
-      null,
-      Validators.compose([
-        Validators.required,
-        Validators.pattern('(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).{8,}'),
-      ]),
-    ],
-    email: [null, Validators.compose([Validators.required, Validators.email])],
-    role: [null, Validators.required],
-  });
-
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private fb: FormBuilder
-  ) {
-    this.errorMessage = '';
-  }
-
-  addUser() {
-    if (!this.newUserForm.valid) {
-      this.errorMessage = 'Please fill in all fields.';
-      return;
-    }
-
-    const newUser = {
-      username: this.newUserForm.value.username,
-      passwordHash: this.newUserForm.value.password,
-      email: this.newUserForm.value.email,
-      role: this.newUserForm.value.role,
-    };
-
-    console.log('New User', newUser);
-
-    this.http
-      .post(`${environment.apiBaseUrl}/users`, {
-        user: newUser,
-      })
-      .subscribe({
-        next: (user) => {
-          console.log('User created', user);
-          this.router.navigate(['/user-management/users']);
-        },
-        error: (error) => {
-          console.error('Error creating user', error);
-          this.errorMessage = error.message;
-        },
-      });
-  }
-}
-
-*/
